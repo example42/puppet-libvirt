@@ -378,7 +378,7 @@ class libvirt (
       notify  => $libvirt::manage_service_autorestart,
       source  => $libvirt::source_dir,
       recurse => true,
-      purge   => $libvirt::source_dir_purge,
+      purge   => $libvirt::bool_source_dir_purge,
       replace => $libvirt::manage_file_replace,
       audit   => $libvirt::manage_audit,
     }

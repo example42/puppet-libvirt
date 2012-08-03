@@ -346,13 +346,17 @@ class libvirt (
     require    => Package['libvirt'],
   }
 
-  service { 'libvirt_guests':
-    ensure     => $libvirt::manage_service_ensure,
-    name       => $libvirt::service_guests,
-    enable     => $libvirt::manage_service_enable,
-    hasstatus  => $libvirt::service_status,
-    pattern    => $libvirt::process,
-    require    => Package['libvirt'],
+  if $::operatingsystem != 'Ubuntu'
+  and $::operatingsystem != 'Debian'
+  and $::operatingsystem != 'Mint' {
+    service { 'libvirt_guests':
+      ensure     => $libvirt::manage_service_ensure,
+      name       => $libvirt::service_guests,
+      enable     => $libvirt::manage_service_enable,
+      hasstatus  => $libvirt::service_status,
+      pattern    => $libvirt::process,
+      require    => Package['libvirt'],
+    }
   }
 
   file { 'libvirt.conf':

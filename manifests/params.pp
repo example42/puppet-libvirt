@@ -17,11 +17,13 @@ class libvirt::params {
   ### Application related parameters
 
   $package = $::operatingsystem ? {
-    default => 'libvirt',
+    /(?i:Debian|Ubuntu|Mint)/ => 'libvirt-bin',
+    default                   => 'libvirt',
   }
 
   $service = $::operatingsystem ? {
-    default => 'libvirtd',
+    /(?i:Debian|Ubuntu|Mint)/ => 'libvirt-bin',
+    default                   => 'libvirtd',
   }
 
   $service_guests = $::operatingsystem ? {

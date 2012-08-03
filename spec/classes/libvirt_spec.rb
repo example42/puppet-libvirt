@@ -18,6 +18,17 @@ describe 'libvirt' do
     it { should contain_package('libvirt').with_ensure('1.0.42') }
   end
 
+  describe 'Test services libvirt_guests with debian host' do
+    let(:facts) { { :operatingsystem => 'Debian' } }
+    it { should_not contain_service('libvirt_guests').with_ensure('running') }
+    it { should_not contain_service('libvirt_guests').with_enable('true') }
+  end
+
+  describe 'Test services libvirt_guests without debian host' do
+    it { should contain_service('libvirt_guests').with_ensure('running') }
+    it { should contain_service('libvirt_guests').with_enable('true') }
+  end
+
   describe 'Test standard installation with monitoring and firewalling' do
     let(:params) { {:monitor => true , :firewall => true, :port => '42', :protocol => 'tcp' } }
 
@@ -38,7 +49,7 @@ describe 'libvirt' do
   describe 'Test decommissioning - absent' do
     let(:params) { {:absent => true, :monitor => true , :firewall => true, :port => '42', :protocol => 'tcp'} }
 
-    it 'should remove Package[libvirt]' do should contain_package('libvirt').with_ensure('absent') end 
+    it 'should remove Package[libvirt]' do should contain_package('libvirt').with_ensure('absent') end
     it 'should stop Service[libvirt]' do should contain_service('libvirt').with_ensure('stopped') end
     it 'should not enable at boot Service[libvirt]' do should contain_service('libvirt').with_enable('false') end
     it 'should remove libvirt configuration file' do should contain_file('libvirt.conf').with_ensure('absent') end
@@ -71,7 +82,7 @@ describe 'libvirt' do
 
   describe 'Test decommissioning - disableboot' do
     let(:params) { {:disableboot => true, :monitor => true , :firewall => true, :port => '42', :protocol => 'tcp'} }
-  
+
     it { should contain_package('libvirt').with_ensure('present') }
     it { should_not contain_service('libvirt').with_ensure('present') }
     it { should_not contain_service('libvirt').with_ensure('absent') }
@@ -85,7 +96,7 @@ describe 'libvirt' do
       content = catalogue.resource('firewall', 'libvirt_tcp_42').send(:parameters)[:enable]
       content.should == true
     end
-  end 
+  end
 
   describe 'Test customizations - template' do
     let(:params) { {:template => "libvirt/spec.erb" , :options => { 'opt_a' => 'value_a' } } }
@@ -180,7 +191,7 @@ describe 'libvirt' do
       content = catalogue.resource('firewall', 'libvirt_tcp_42').send(:parameters)[:tool]
       content.should == "iptables"
     end
-    it 'should generate puppi resources ' do 
+    it 'should generate puppi resources ' do
       content = catalogue.resource('puppi::ze', 'libvirt').send(:parameters)[:ensure]
       content.should == "present"
     end

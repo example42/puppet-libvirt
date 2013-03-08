@@ -137,20 +137,13 @@ describe 'libvirt' do
     end
   end
 
-  describe 'Test service autorestart', :broken => true do
-    it 'should automatically restart the service, by default' do
-      content = catalogue.resource('file', 'libvirt.conf').send(:parameters)[:notify]
-      content.should == 'Service[libvirt]{:name=>"libvirt"}'
-    end
+  describe 'Test service autorestart' do
+    it { should contain_file('libvirt.conf').without_notify }
   end
 
-  describe 'Test service autorestart' do
-    let(:params) { {:service_autorestart => "no" } }
-
-    it 'should not automatically restart the service, when service_autorestart => false' do
-      content = catalogue.resource('file', 'libvirt.conf').send(:parameters)[:notify]
-      content.should be_nil
-    end
+  describe 'Test service autorestart enabled' do
+    let(:params) { {:service_autorestart => "yes" } }
+    it { should contain_file('libvirt.conf').with_notify('Service[libvirt]') }
   end
 
   describe 'Test Puppi Integration' do

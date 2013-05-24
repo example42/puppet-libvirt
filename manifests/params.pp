@@ -87,7 +87,7 @@ class libvirt::params {
     default => '/var/log/libvirt/libvirtd.log',
   }
 
-  $port = '5900'
+  $port = ''
   $protocol = 'tcp'
 
   # General Settings

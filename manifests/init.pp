@@ -408,12 +408,14 @@ class libvirt (
 
   ### Service monitoring, if enabled ( monitor => true )
   if $libvirt::bool_monitor == true {
-    monitor::port { "libvirt_${libvirt::protocol}_${libvirt::port}":
-      protocol => $libvirt::protocol,
-      port     => $libvirt::port,
-      target   => $libvirt::monitor_target,
-      tool     => $libvirt::monitor_tool,
-      enable   => $libvirt::manage_monitor,
+    if $libvirt::port {
+      monitor::port { "libvirt_${libvirt::protocol}_${libvirt::port}":
+        protocol => $libvirt::protocol,
+        port     => $libvirt::port,
+        target   => $libvirt::monitor_target,
+        tool     => $libvirt::monitor_tool,
+        enable   => $libvirt::manage_monitor,
+      }
     }
     monitor::process { 'libvirt_process':
       process  => $libvirt::process,

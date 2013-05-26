@@ -95,7 +95,7 @@ class libvirt::params {
     default                   => true,
   }
 
-  $port = '5900'
+  $port = ''
   $protocol = 'tcp'
 
   # General Settings

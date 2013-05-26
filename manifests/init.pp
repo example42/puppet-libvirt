@@ -214,6 +214,8 @@ class libvirt (
   $source_dir_purge    = params_lookup( 'source_dir_purge' ),
   $template            = params_lookup( 'template' ),
   $service_autorestart = params_lookup( 'service_autorestart' , 'global' ),
+  $service_guests      = params_lookup( 'service_guests' ),
+  $has_guests_service  = params_lookup( 'has_guests_service' ),
   $options             = params_lookup( 'options' ),
   $version             = params_lookup( 'version' ),
   $absent              = params_lookup( 'absent' ),
@@ -346,9 +348,7 @@ class libvirt (
     require    => Package['libvirt'],
   }
 
-  if $::operatingsystem != 'Ubuntu'
-  and $::operatingsystem != 'Debian'
-  and $::operatingsystem != 'Mint' {
+  if $libvirt::has_guests_service {
     service { 'libvirt_guests':
       ensure     => $libvirt::manage_service_ensure,
       name       => $libvirt::service_guests,

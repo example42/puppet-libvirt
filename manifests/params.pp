@@ -87,6 +87,14 @@ class libvirt::params {
     default => '/var/log/libvirt/libvirtd.log',
   }
 
+  $has_guests_service = $operatingsystem ? {
+    /(?i:Debian|Ubuntu|Mint)/ => $lsbdistcodename ? {
+      'wheezy' => true,
+      default  => false,
+    },
+    default                   => true,
+  }
+
   $port = '5900'
   $protocol = 'tcp'
 

@@ -53,7 +53,6 @@ define libvirt::configfile (
     content => template($template),
     replace => $libvirt::manage_file_replace,
     audit   => $libvirt::manage_audit,
-    noop    => $libvirt::bool_noops,
   }
 
 }

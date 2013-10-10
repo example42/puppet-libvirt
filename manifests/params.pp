@@ -71,6 +71,10 @@ class libvirt::params {
     default                   => '/etc/sysconfig/libvirt',
   }
 
+  $config_file_content = $::operatingsystem ? {
+    default => undef,
+  }
+
   $pid_file = $::operatingsystem ? {
     default => '/var/run/libvirt/network/default.pid',
   }

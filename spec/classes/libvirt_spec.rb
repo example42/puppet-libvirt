@@ -112,6 +112,16 @@ describe 'libvirt' do
 
   end
 
+  describe 'Test customizations - config_file_content' do
+    let(:params) {{ :config_file_content => "foo: bar\nbaz: quix\n" }}
+
+    it 'should generate a config file' do
+      should contain_file('libvirt.conf').
+        with_content(/^foo: bar$/).
+        with_content(/^baz: quix$/)
+    end
+  end
+
   describe 'Test customizations - source' do
     let(:params) { {:source => "puppet://modules/libvirt/spec" , :source_dir => "puppet://modules/libvirt/dir/spec" , :source_dir_purge => true } }
 

@@ -244,6 +244,7 @@ class libvirt (
   $config_file_owner   = params_lookup( 'config_file_owner' ),
   $config_file_group   = params_lookup( 'config_file_group' ),
   $config_file_init    = params_lookup( 'config_file_init' ),
+  $config_file_content = params_lookup( 'config_file_content' ),
   $pid_file            = params_lookup( 'pid_file' ),
   $data_dir            = params_lookup( 'data_dir' ),
   $log_dir             = params_lookup( 'log_dir' ),
@@ -328,9 +329,13 @@ class libvirt (
     default   => $libvirt::source,
   }
 
-  $manage_file_content = $libvirt::template ? {
-    ''        => undef,
-    default   => template($libvirt::template),
+  if $libvirt::template {
+    $manage_file_content = $libvirt::template ? {
+      ''        => undef,
+      default   => template($libvirt::template),
+    }
+  } else {
+    $manage_file_content = $libvirt::config_file_content
   }
 
   ### Managed resources

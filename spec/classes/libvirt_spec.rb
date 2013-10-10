@@ -18,15 +18,34 @@ describe 'libvirt' do
     it { should contain_package('libvirt').with_ensure('1.0.42') }
   end
 
-  describe 'Test services libvirt_guests with debian host' do
-    let(:facts) { { :operatingsystem => 'Debian' } }
-    it { should_not contain_service('libvirt_guests').with_ensure('running') }
-    it { should_not contain_service('libvirt_guests').with_enable('true') }
-  end
+  describe 'libvirt_guest service' do
+    describe 'on debian' do
+      let(:facts) { { :osfamily => 'Debian' } }
 
-  describe 'Test services libvirt_guests without debian host' do
-    it { should contain_service('libvirt_guests').with_ensure('running') }
-    it { should contain_service('libvirt_guests').with_enable('true') }
+      it do
+        should_not contain_service('libvirt_guests').
+          with_ensure('running').
+          with_enable('true')
+      end
+    end
+
+    describe 'on redhat' do
+      let(:facts) { { :osfamily => 'RedHat' } }
+
+      it do
+        should contain_service('libvirt_guests').
+          with_ensure('running').
+          with_enable('true')
+      end
+    end
+
+    describe 'with no operatingsystem/osfamily' do
+      it do
+        should contain_service('libvirt_guests').
+          with_ensure('running').
+          with_enable('true')
+      end
+    end
   end
 
   describe 'Test standard installation with monitoring and firewalling' do

@@ -16,83 +16,86 @@ class libvirt::params {
 
   ### Application related parameters
 
-  $package = $::operatingsystem ? {
-    /(?i:Debian|Ubuntu|Mint)/ => 'libvirt-bin',
-    default                   => 'libvirt',
+  $package = $::osfamily ? {
+    'debian' => 'libvirt-bin',
+    'redhat' => 'libvirt',
+    default  => 'libvirt',
   }
 
-  $service = $::operatingsystem ? {
-    /(?i:Debian|Ubuntu|Mint)/ => 'libvirt-bin',
-    default                   => 'libvirtd',
+  $service = $::osmfaily ? {
+    'debian' => 'libvirt-bin',
+    'redhat' => 'libvirtd',
+    default  => 'libvirtd',
   }
 
-  $service_guests = $::operatingsystem ? {
+  $service_guests = $::osfamily ? {
     default => 'libvirt-guests',
   }
 
-  $service_status = $::operatingsystem ? {
+  $service_status = $::osfamily ? {
     default => true,
   }
 
-  $process = $::operatingsystem ? {
+  $process = $::osfamily ? {
     default => 'libvirtd',
   }
 
-  $process_args = $::operatingsystem ? {
+  $process_args = $::osfamily ? {
     default => '',
   }
 
-  $process_user = $::operatingsystem ? {
+  $process_user = $::osfamily ? {
     default => 'root',
   }
 
-  $config_dir = $::operatingsystem ? {
+  $config_dir = $::osfamily ? {
     default => '/etc/libvirt',
   }
 
-  $config_file = $::operatingsystem ? {
+  $config_file = $::osfamily ? {
     default => '/etc/libvirt/libvirtd.conf',
   }
 
-  $config_file_mode = $::operatingsystem ? {
+  $config_file_mode = $::osfamily ? {
     default => '0644',
   }
 
-  $config_file_owner = $::operatingsystem ? {
+  $config_file_owner = $::osfamily ? {
     default => 'root',
   }
 
-  $config_file_group = $::operatingsystem ? {
+  $config_file_group = $::osfamily ? {
     default => 'root',
   }
 
-  $config_file_init = $::operatingsystem ? {
+  $config_file_init = $::osfamily ? {
     /(?i:Debian|Ubuntu|Mint)/ => '/etc/default/libvirt',
     default                   => '/etc/sysconfig/libvirt',
   }
 
-  $pid_file = $::operatingsystem ? {
+  $pid_file = $::osfamily ? {
     default => '/var/run/libvirt/network/default.pid',
   }
 
-  $data_dir = $::operatingsystem ? {
+  $data_dir = $::osfamily ? {
     default => '/var/lib/libvirt',
   }
 
-  $log_dir = $::operatingsystem ? {
+  $log_dir = $::osfamily ? {
     default => '/var/log/libvirt',
   }
 
-  $log_file = $::operatingsystem ? {
+  $log_file = $::osfamily ? {
     default => '/var/log/libvirt/libvirtd.log',
   }
 
-  $has_guests_service = $operatingsystem ? {
-    /(?i:Debian|Ubuntu|Mint)/ => $lsbdistcodename ? {
+  $has_guests_service = $::osfamily ? {
+    'debian' => $::lsbdistcodename ? {
       'wheezy' => true,
       default  => false,
     },
-    default                   => true,
+    'redhat' => true,
+    default  => true,
   }
 
   $port = ''
